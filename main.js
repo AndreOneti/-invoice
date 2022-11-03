@@ -1,6 +1,6 @@
-$save.addEventListener('click', _ => doc.save(docName));
+$save.addEventListener('click', _ => generatePDF(true));
 
-function generatePDF() {
+function generatePDF(shouldSave = false) {
   doc = new jsPDF('l');
   const [first, second] = cliente.NAME.split(" ");
   docName = `ORÇAMENTO_${first}_${second}.pdf`;
@@ -124,8 +124,13 @@ function generatePDF() {
     }
   }
 
-  const out = doc.output();
-  const url = 'data:application/pdf;base64,' + btoa(out);
+  if (shouldSave) {
+    doc.save(docName);
+  }
+  else {
+    const out = doc.output();
+    const url = 'data:application/pdf;base64,' + btoa(out);
 
-  $pdfView.data = url;
+    $pdfView.data = url;
+  }
 }
