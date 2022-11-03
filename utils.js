@@ -32,7 +32,7 @@ const cliente = {
 
 const fornecedor = {
   "NAME": "Jon Doe",
-  "ENDERECO":  "Rua 123 de Oliveira 4 - ABC",
+  "ENDERECO": "Rua 123 de Oliveira 4 - ABC",
   "CEP": "00000-000",
   "CIDADE": "Never Land",
   "ESTADO": "NL",
@@ -69,6 +69,10 @@ function dateNextWeekFormmated() {
 
 function getTotalPrice() {
   return `R$ ${itens.reduce((acc, curr) => acc += curr.PRICE_REGULAR * curr.QUANTITY, 0).format()}`;
+}
+
+function randomColor() {
+  return "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
 }
 //#endregion
 
