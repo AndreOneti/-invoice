@@ -1,44 +1,68 @@
 const { jsPDF } = window.jspdf;
 
-const $input = document.getElementById('txt');
-const $save = document.getElementById('save');
-const $landscapeToggle = document.getElementById('landscape');
 const $pdfView = document.getElementById('myPdf');
+const $produto_base = document.getElementById('produto_base');
+const pdfModal = new bootstrap.Modal('#exampleModal', {});
+
+;[
+  fornecedor_nome,
+  fornecedor_endereco,
+  fornecedor_cep,
+  fornecedor_cidade,
+  fornecedor_estado,
+  fornecedor_documento,
+  fornecedor_telefone,
+  fornecedor_vendedor,
+  cliente_nome,
+  cliente_endereco,
+  cliente_cep,
+  cliente_cidade,
+  cliente_estado,
+  cliente_documento,
+  cliente_telefone,
+  cliente_email
+].forEach(field => {
+  field.addEventListener('input', function updateValue() {
+    const [obj, key] = field.name.split("_");
+
+    if (obj === "cliente") {
+      cliente[key] = this.value.trim();
+    } else {
+      fornecedor[key] = this.value.trim();
+    }
+  });
+});
+
+preview.addEventListener('click', _ => generatePDF());
+salvar.addEventListener('click', _ => generatePDF(true));
 
 let doc = new jsPDF('l');
 let docName = "ORÇAMENTO.pdf";
 
 const formPag = "A vista ";
 
-const itens = [
-  {
-    "PRODUTO": "Prod 1",
-    "DESCRIPTION": "Meu produto 1",
-    "QUANTITY": 1,
-    "PRICE_REGULAR": 2.90,
-  }
-];
+const itens = [];
 
 const cliente = {
-  "NAME": "Jon Doe",
-  "ENDERECO": "Rua 123 de Oliveira 4 - ABC",
-  "CEP": "00000-000",
-  "CIDADE": "Never Land",
-  "ESTADO": "NL",
-  "DOC": "999.999.999-99",
-  "TEL": "",
-  "EMAIL": ""
+  "nome": "",
+  "endereco": "",
+  "cep": "",
+  "cidade": "",
+  "estado": "",
+  "documento": "",
+  "telefone": "",
+  "email": ""
 }
 
 const fornecedor = {
-  "NAME": "Jon Doe",
-  "ENDERECO": "Rua 123 de Oliveira 4 - ABC",
-  "CEP": "00000-000",
-  "CIDADE": "Never Land",
-  "ESTADO": "NL",
-  "DOC": "1000000000",
-  "TEL": "",
-  "VENDEDOR": "Jane Doe"
+  "nome": "",
+  "endereco": "",
+  "cep": "",
+  "cidade": "",
+  "estado": "",
+  "documento": "",
+  "telefone": "",
+  "vendedor": ""
 }
 
 //#region Functions

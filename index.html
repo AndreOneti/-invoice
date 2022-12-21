@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+
+    <title>Invoice | Andre Oneti</title>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+      integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      defer
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+      defer
+    ></script>
+
+    <script src="utils.js" defer></script>
+    <script src="main.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <img src="assets/Avatar-mini-logo.png" alt="Avatar do Andre Oneti" />
+    </header>
+
+    <main>
+      <img id="logo" width="404" height="83" src="" hidden="true" alt="" />
+      <canvas id="Canvas" width="400" hidden="true"></canvas>
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Preview Orçamento
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <object id="myPdf"></object>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex flex-sm-column flex-md-row p-3">
+        <section class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-4 empresa">
+          <h3 class="mb-4">Dados do Vendedor/Empresa</h3>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Fornecedor</span>
+            <input
+              type="text"
+              class="form-control"
+              id="fornecedor_nome"
+              name="fornecedor_nome"
+              aria-label="Nome do fornecedor"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Endereco</span>
+            <input
+              type="text"
+              class="form-control"
+              id="fornecedor_endereco"
+              name="fornecedor_endereco"
+              aria-label="Endereco"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">CEP</span>
+            <input
+              type="text"
+              class="form-control"
+              id="fornecedor_cep"
+              name="fornecedor_cep"
+              aria-label="CEP"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Cidade</span>
+            <input
+              type="text"
+              class="form-control"
+              id="fornecedor_cidade"
+              name="fornecedor_cidade"
+              aria-label="Cidade"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Estado</span>
+            <input
+              type="text"
+              class="form-control"
+              id="fornecedor_estado"
+              name="fornecedor_estado"
+              aria-label="Estado"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Documento</span>
+            <input
+              type="text"
+              class="form-control"
+              id="fornecedor_documento"
+              name="fornecedor_documento"
+              aria-label="Documento"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Telefone</span>
+            <input
+              type="text"
+              class="form-control"
+              id="fornecedor_telefone"
+              name="fornecedor_telefone"
+              aria-label="Telefone"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Vendedor</span>
+            <input
+              type="text"
+              class="form-control"
+              id="fornecedor_vendedor"
+              name="fornecedor_vendedor"
+              aria-label="Vendedor"
+            />
+          </div>
+        </section>
+
+        <section
+          class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-4 cliente offset-md-1"
+        >
+          <h3 class="mb-4">Dados do Cliente</h3>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Nome</span>
+            <input
+              type="text"
+              class="form-control"
+              id="cliente_nome"
+              name="cliente_nome"
+              aria-label="Nome do client"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Endereco</span>
+            <input
+              type="text"
+              class="form-control"
+              id="cliente_endereco"
+              name="cliente_endereco"
+              aria-label="endereço do client"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">CEP</span>
+            <input
+              type="text"
+              class="form-control"
+              id="cliente_cep"
+              name="cliente_cep"
+              aria-label="cep do client"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Cidade</span>
+            <input
+              type="text"
+              class="form-control"
+              id="cliente_cidade"
+              name="cliente_cidade"
+              aria-label="Cidade do client"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Estado</span>
+            <input
+              type="text"
+              class="form-control"
+              id="cliente_estado"
+              name="cliente_estado"
+              aria-label="Estado do client"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Documento</span>
+            <input
+              type="text"
+              class="form-control"
+              id="cliente_documento"
+              name="cliente_documento"
+              aria-label="Documento do client"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Telefone</span>
+            <input
+              type="text"
+              class="form-control"
+              id="cliente_telefone"
+              name="cliente_telefone"
+              aria-label="Telefone do client"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">E-mail</span>
+            <input
+              type="text"
+              class="form-control"
+              id="cliente_email"
+              name="cliente_email"
+              aria-label="E-mail do client"
+            />
+          </div>
+        </section>
+      </div>
+
+      <hr />
+
+      <section class="d-flex flex-column justify-content-center">
+        <h3>Produtos</h3>
+
+        <div class="template col-10 offset-1 bg-secondary p-3">
+          <div class="input-group mb-3">
+            <span class="input-group-text">Produto</span>
+            <input
+              id="template-produto"
+              type="text"
+              class="form-control"
+              aria-label="Produto"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Descrição</span>
+            <input
+              id="template-descricao"
+              type="text"
+              class="form-control"
+              aria-label="Descrição do produto"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Quantidade</span>
+            <input
+              id="template-qtd"
+              type="number"
+              class="form-control"
+              aria-label="Quantidade do produto"
+            />
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Preço Unit.</span>
+            <input
+              id="template-preco"
+              type="number"
+              class="form-control"
+              aria-label="Valor unitario do produto"
+            />
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-dark mt-3 new-iten"
+          onclick="createNewItem()"
+        >
+          Adicionar
+        </button>
+
+        <hr />
+
+        <div class="d-flex action-buttons">
+          <button
+            id="preview"
+            type="button"
+            class="btn btn-primary me-5"
+          >
+            Preview
+          </button>
+          <button id="salvar" type="button" class="btn btn-primary">
+            Salvar
+          </button>
+        </div>
+
+        <hr />
+
+        <ul class="list-group"></ul>
+      </section>
+    </main>
+
+    <footer>Copyright © 2022 - Andre Oneti</footer>
+  </body>
+</html>

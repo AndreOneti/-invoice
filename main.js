@@ -1,9 +1,9 @@
-$save.addEventListener('click', _ => generatePDF(true));
 
 function generatePDF(shouldSave = false) {
+  updateItens();
   doc = new jsPDF('l');
-  const [first, second] = cliente.NAME.split(" ");
-  docName = `ORÇAMENTO_${first}_${second}.pdf`;
+  const [first, second] = cliente.nome.split(" ");
+  docName = `ORÇAMENTO_${first}_${second || ""}.pdf`;
 
   let numberOfPages = Math.ceil(itens.length / 25);
   if (itens.length % 25 === 0) numberOfPages++;
@@ -42,26 +42,27 @@ function generatePDF(shouldSave = false) {
     doc.line(2, 60, 295, 60);
 
     doc.text(
-      `FORNECEDOR\n\n${fornecedor.NAME
-      }\n${fornecedor.ENDERECO
-      }\n${fornecedor.CIDADE
-      } - ${fornecedor.ESTADO
-      }\nTEL.: ${fornecedor.TEL
-      }\nCNPJ.: ${fornecedor.DOC
+      `FORNECEDOR\n\n${fornecedor.nome
+      }\n${fornecedor.endereco
+      }\nCEP.:${cliente.cep
+      } - ${fornecedor.cidade
+      } - ${fornecedor.estado
+      }\nTEL.: ${fornecedor.telefone
+      }\nCNPJ.: ${fornecedor.documento
       }`,
       12,
       29
     );
 
     doc.text(
-      `CLIENTE\n\n${cliente.NAME
-      }\n${cliente.ENDERECO
-      }\nCEP.:${cliente.CEP
-      } - ${cliente.CIDADE
-      } - ${cliente.ESTADO
-      }\nCPF/CNPJ:${cliente.DOC
-      }\nTEL.:${cliente.TEL
-      }   \nEMAIL:${cliente.EMAIL
+      `CLIENTE\n\n${cliente.nome
+      }\n${cliente.endereco
+      }\nCEP.:${cliente.cep
+      } - ${cliente.cidade
+      } - ${cliente.estado
+      }\nCPF/CNPJ:${cliente.documento
+      }\nTEL.:${cliente.telefone
+      }   \nEMAIL:${cliente.email
       }`,
       96,
       29
@@ -69,7 +70,7 @@ function generatePDF(shouldSave = false) {
 
     doc.text(`ORÇAMENTO\n\nEMISSÃO: ${this.dateNowFormatted()
       }\nCOND. PGTO: ${formPag
-      }\nVENDEDOR: ${fornecedor.VENDEDOR
+      }\nVENDEDOR: ${fornecedor.vendedor
       }`,
       190,
       29
@@ -128,9 +129,153 @@ function generatePDF(shouldSave = false) {
     doc.save(docName);
   }
   else {
-    const out = doc.output();
-    const url = 'data:application/pdf;base64,' + btoa(out);
 
-    $pdfView.data = url;
+    pdfModal.show()
+
+    setTimeout(() => {
+      const out = doc.output();
+      const url = 'data:application/pdf;base64,' + btoa(out);
+
+      $pdfView.data = url;
+    }, 150);
   }
+}
+
+function updateItens() {
+  itens.length = 0;
+  [...document.querySelectorAll("li")].forEach(li => {
+    itens.push({
+      "PRODUTO": li.querySelector('[aria-label="Produto"]').value,
+      "DESCRIPTION": li.querySelector('[aria-label="Descrição do produto"]').value,
+      "QUANTITY": Number(li.querySelector('[aria-label="Quantidade do produto"]').value),
+      "PRICE_REGULAR": Number(li.querySelector('[aria-label="Valor unitario do produto"]').value),
+    });
+  });
+
+}
+
+function createLi() {
+  const li = document.createElement("li");
+  li.className = "list-group-item col-10 offset-1 bg-secondary";
+  return li;
+}
+
+function createDivGroup() {
+  const div = document.createElement("div");
+  div.className = "input-group mb-3";
+  return div;
+}
+
+function createSpan(text) {
+  const span = document.createElement("span");
+  span.textContent = text;
+  span.className = "input-group-text";
+  return span;
+}
+
+function createInput(value, label, type = "text") {
+  const input = document.createElement("input");
+  input.setAttribute("type", type);
+  input.setAttribute("value", value);
+  input.setAttribute("aria-label", label);
+  input.className = "form-control";
+  return input;
+}
+
+function createPruductDiv(value) {
+  const div = createDivGroup();
+  const span = createSpan("Produto");
+  const input = createInput(value, "Produto");
+
+  div.appendChild(span);
+  div.appendChild(input);
+
+  return div;
+}
+
+function createDesciptionDiv(value) {
+  const div = createDivGroup();
+  const span = createSpan("Descrição");
+  const input = createInput(value, "Descrição do produto");
+
+  div.appendChild(span);
+  div.appendChild(input);
+
+  return div;
+}
+
+function createQtdDiv(value) {
+  const div = createDivGroup();
+  const span = createSpan("Quantidade");
+  const input = createInput(value, "Quantidade do produto", "number");
+
+  div.appendChild(span);
+  div.appendChild(input);
+
+  return div;
+}
+
+function createPrecoDiv(value) {
+  const div = createDivGroup();
+  const span = createSpan("Preço Unit.");
+  const input = createInput(value, "Valor unitario do produto", "number");
+
+  div.appendChild(span);
+  div.appendChild(input);
+
+  return div;
+}
+
+function createCloseBtn() {
+  const container = document.createElement("div");
+  container.className = "d-grid gap-2 d-flex justify-content-end mb-3";
+
+  const btn = document.createElement("button");
+  btn.setAttribute("type", "button");
+  btn.className = "btn btn-close align-rigth";
+
+  container.appendChild(btn);
+
+  return container;
+}
+
+function clearFields() {
+  globalThis["template-produto"].value = "";
+  globalThis["template-descricao"].value = "";
+  globalThis["template-qtd"].value = "";
+  globalThis["template-preco"].value = "";
+}
+
+function createNewItem() {
+
+  const producName = globalThis["template-produto"].value;
+  const productDescription = globalThis["template-descricao"].value;
+  const productQtd = globalThis["template-qtd"].value;
+  const productPreco = globalThis["template-preco"].value;
+
+  const ul = document.querySelector("ul");
+  const li = createLi();
+  const container = document.createElement("div");
+
+  const btn = createCloseBtn();
+  btn.addEventListener('click', function removeParent() {
+    this.parentElement.parentElement.remove();
+  });
+
+  const productDiv = createPruductDiv(producName);
+  const descriptiontDiv = createDesciptionDiv(productDescription);
+  const qtdDiv = createQtdDiv(productQtd);
+  const precoDiv = createPrecoDiv(productPreco);
+
+  container.appendChild(btn);
+  container.appendChild(productDiv);
+  container.appendChild(descriptiontDiv);
+  container.appendChild(qtdDiv);
+  container.appendChild(precoDiv);
+
+  li.appendChild(container);
+
+  ul.appendChild(li);
+
+  clearFields();
 }
