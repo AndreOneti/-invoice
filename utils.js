@@ -155,3 +155,21 @@ String.prototype.reverse = function () {
   return this.split("").reverse().join("");
 }
 //#endregion
+
+function updatePhoneMask(event) {
+  const target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+  const phone = target.value.replace(/\D/g, '');
+  const element = $(target);
+  element.unmask();
+  if (phone.length > 10) {
+    element.mask("(99) 9 9999-9999");
+  } else {
+    element.mask("(99) 9999-9999");
+  }
+}
+
+$("#cliente_cep").mask("99999-999");
+$("#fornecedor_cep").mask("99999-999");
+
+$("#fornecedor_telefone").mask("(99) 9 9999-9999").focusout(updatePhoneMask);
+$("#cliente_telefone").mask("(99) 9 9999-9999").focusout(updatePhoneMask);

@@ -27,6 +27,14 @@
       crossorigin="anonymous"
       defer
     ></script>
+    <script
+      src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+      defer
+    ></script>
+    <script
+      src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"
+      defer
+    ></script>
 
     <script src="utils.js" defer></script>
     <script src="main.js" defer></script>
@@ -47,7 +55,9 @@
         tabindex="-1"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-fullscreen">
+        <div
+          class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-fullscreen"
+        >
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="exampleModalLabel">
@@ -76,7 +86,9 @@
         </div>
       </div>
 
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex flex-column flex-md-row p-3">
+      <div
+        class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex flex-column flex-md-row p-3"
+      >
         <section class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-4 empresa">
           <h3 class="mb-4">Dados do Vendedor/Empresa</h3>
 
@@ -321,11 +333,7 @@
         <hr />
 
         <div class="d-flex action-buttons">
-          <button
-            id="preview"
-            type="button"
-            class="btn btn-primary me-5"
-          >
+          <button id="preview" type="button" class="btn btn-primary me-5">
             Preview
           </button>
           <button id="salvar" type="button" class="btn btn-primary">
