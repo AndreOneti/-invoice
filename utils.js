@@ -160,12 +160,26 @@ function updatePhoneMask(event) {
   const target = (event.currentTarget) ? event.currentTarget : event.srcElement;
   const phone = target.value.replace(/\D/g, '');
   const element = $(target);
+
   element.unmask();
-  if (phone.length > 10) {
-    element.mask("(99) 9 9999-9999");
-  } else {
-    element.mask("(99) 9999-9999");
-  }
+  element.mask(
+    phone.length > 10
+      ? "(99) 9 9999-9999"
+      : "(99) 9999-9999"
+  );
+}
+
+function updateCpfCnpjMask(event) {
+  const target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+  const document = target.value.replace(/\D/g, '');
+  const element = $(target);
+
+  element.unmask();
+  element.mask(
+    document.length > 11
+      ? "99.999.999/9999-99"
+      : "999.999.999-99"
+  );
 }
 
 $("#cliente_cep").mask("99999-999");
@@ -173,3 +187,6 @@ $("#fornecedor_cep").mask("99999-999");
 
 $("#fornecedor_telefone").mask("(99) 9 9999-9999").focusout(updatePhoneMask);
 $("#cliente_telefone").mask("(99) 9 9999-9999").focusout(updatePhoneMask);
+
+$("#fornecedor_documento").mask("99.999.999/9999-99");
+$("#cliente_documento").mask("99.999.999/9999-99").focusout(updateCpfCnpjMask);
